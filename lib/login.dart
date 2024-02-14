@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hash_mufattish/HomeScreen.dart';
+import 'package:hash_mufattish/app_localizations.dart';
+import 'package:hash_mufattish/local_Provider.dart';
 import 'package:loading_icon_button/loading_icon_button.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,14 +20,11 @@ class _LoginScreenState extends State<LoginScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
-            "assets/logo.png",
-            scale: 5,
-          ),
-          SizedBox(
-            height: 10,
+            "assets/HASH MUFATTISH.png",
+            scale: 4,
           ),
           Text(
-            "Sign In",
+            AppLocalizations.of(context)!.translate('Sign In'),
             style: TextStyle(fontSize: 25),
           ),
           SizedBox(
@@ -41,7 +41,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               child: TextField(
                 decoration: InputDecoration(
-                    border: InputBorder.none, hintText: "Email"),
+                    border: InputBorder.none,
+                    hintText: AppLocalizations.of(context)!.translate('Email')),
               ),
             ),
           ),
@@ -56,7 +57,9 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               child: TextField(
                 decoration: InputDecoration(
-                    border: InputBorder.none, hintText: "Password"),
+                    border: InputBorder.none,
+                    hintText:
+                        AppLocalizations.of(context)!.translate('Password')),
               ),
             ),
           ),
@@ -70,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
               color: Colors.black,
               borderSide: BorderSide(color: Colors.blue),
               child: Text(
-                "SIGN IN",
+                AppLocalizations.of(context)!.translate('SIGN IN'),
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 15,
@@ -95,16 +98,30 @@ class _LoginScreenState extends State<LoginScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                "English",
-                style: TextStyle(fontSize: 18),
+              GestureDetector(
+                onTap: () {
+                  final provider =
+                      Provider.of<LocaleProvider>(context, listen: false);
+                  provider.setLocale(const Locale('en'));
+                },
+                child: Text(
+                  "English",
+                  style: TextStyle(fontSize: 18),
+                ),
               ),
               SizedBox(
                 width: 20,
               ),
-              Text(
-                "عربی",
-                style: TextStyle(fontSize: 20),
+              GestureDetector(
+                onTap: () {
+                  final provider =
+                      Provider.of<LocaleProvider>(context, listen: false);
+                  provider.setLocale(const Locale('ar'));
+                },
+                child: Text(
+                  "عربی",
+                  style: TextStyle(fontSize: 20),
+                ),
               ),
             ],
           )
