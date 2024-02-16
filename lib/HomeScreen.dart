@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hash_mufattish/Profile.dart';
+import 'package:hash_mufattish/app_localizations.dart';
 import 'package:hash_mufattish/login.dart';
 import 'package:loading_icon_button/loading_icon_button.dart';
 import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
@@ -22,15 +23,8 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
-            "assets/logo.png",
-            scale: 8,
-          ),
-          Text(
-            "Hash Mufattish",
-            style: TextStyle(fontSize: 20),
-          ),
-          SizedBox(
-            height: 20,
+            "assets/HASH MUFATTISH.png",
+            scale: 4,
           ),
           Padding(
             padding: const EdgeInsets.all(12.0),
@@ -42,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Colors.black,
               borderSide: BorderSide(color: Colors.blue),
               child: Text(
-                "NEW INSPECTION",
+                AppLocalizations.of(context)!.translate('NEW INSPECTION'),
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 15,
@@ -77,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Colors.black,
               borderSide: BorderSide(color: Colors.blue),
               child: Text(
-                "EQUIPMENT INFO",
+                AppLocalizations.of(context)!.translate('EQUIPMENT INFO'),
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 15,
@@ -103,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Colors.black,
               borderSide: BorderSide(color: Colors.blue),
               child: Text(
-                "MY RECORD",
+                AppLocalizations.of(context)!.translate('MY RECORD'),
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 15,
@@ -129,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Colors.black,
               borderSide: BorderSide(color: Colors.blue),
               child: Text(
-                "MY ACCOUNT",
+                AppLocalizations.of(context)!.translate('MY ACCOUNT'),
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 15,
@@ -158,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Colors.black,
               borderSide: BorderSide(color: Colors.blue),
               child: Text(
-                "LOGOUT",
+                AppLocalizations.of(context)!.translate('LOGOUT'),
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 15,
