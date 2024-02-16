@@ -7,5 +7,12 @@
     "EQUIPMENT INFO":"EQUIPMENT INFO",
     "MY RECORD":"MY RECORD",
     "MY ACCOUNT":"MY ACCOUNT",
-    "LOGOUT":"LOGOUT"
+    "LOGOUT":"LOGOUT",
+    "USER ACCOUNT":"USER ACCOUNT",
+    "Name":"Name",
+    "Company":"Company",
+    "Branch":"Branch",
+    "User Name":"User Name",
+    "SAVE":"SAVE",
+    "Contact No":"Contact No"
 }

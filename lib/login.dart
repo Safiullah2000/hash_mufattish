@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hash_mufattish/HomeScreen.dart';
 import 'package:hash_mufattish/app_localizations.dart';
 import 'package:hash_mufattish/local_Provider.dart';
 import 'package:loading_icon_button/loading_icon_button.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,6 +16,61 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+
+  Future<void> login() async {
+    try {
+      if (email.text == "") {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Email Field is required")));
+      } else if (password.text == "") {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Password Field is required")));
+      } else {
+        final response = await http.post(
+            Uri.parse(
+                'https://inspectosafe.bssstageserverforpanels.xyz/api/login'),
+            body: {
+              "email": email.text,
+              "password": password.text,
+            });
+        Map<dynamic, dynamic> jsonResponse = jsonDecode(response.body);
+        if (jsonResponse["success"] == true) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(jsonResponse["message"])));
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeScreen(
+                name: jsonResponse["user"]["fullname"],
+                company: "",
+                branch: "",
+                email: jsonResponse["user"]["email"],
+                password: password.text,
+                image: jsonResponse["user"]["profile_img"],
+                contact: jsonResponse["user"]["contact_number"],
+              ),
+            ),
+          );
+        } else if (jsonResponse["success"] == false) {
+          if (jsonResponse["message"] is String) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(jsonResponse["message"])));
+          } else if (jsonResponse["message"]["email"] != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(jsonResponse["message"]["email"][0])));
+          } else if (jsonResponse["message"]["password"] != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(jsonResponse["message"]["password"][0])));
+          }
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 borderRadius: BorderRadius.circular(6),
               ),
               child: TextField(
+                controller: email,
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: AppLocalizations.of(context)!.translate('Email')),
@@ -56,6 +115,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 borderRadius: BorderRadius.circular(6),
               ),
               child: TextField(
+                obscureText: true,
+                controller: password,
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText:
@@ -87,8 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
               //   ),
               // ),
               onTap: (startLoading, stopLoading, btnState) {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()));
+                login();
               },
             ),
           ),

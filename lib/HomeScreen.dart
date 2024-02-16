@@ -6,7 +6,23 @@ import 'package:loading_icon_button/loading_icon_button.dart';
 import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  String name;
+  String company;
+  String branch;
+  String email;
+  String password;
+  String image;
+  String contact;
+  HomeScreen({
+    super.key,
+    required this.name,
+    required this.company,
+    required this.branch,
+    required this.email,
+    required this.password,
+    required this.image,
+    required this.contact,
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -137,8 +153,18 @@ class _HomeScreenState extends State<HomeScreen> {
               //   ),
               // ),
               onTap: (startLoading, stopLoading, btnState) {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Profile()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Profile(
+                              name: widget.name,
+                              company: widget.company,
+                              branch: widget.branch,
+                              email: widget.email,
+                              password: widget.password,
+                              image: widget.image,
+                              contact: widget.contact,
+                            )));
               },
             ),
           ),
