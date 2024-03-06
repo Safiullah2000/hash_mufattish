@@ -36,6 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
               "password": password.text,
             });
         Map<dynamic, dynamic> jsonResponse = jsonDecode(response.body);
+        print(jsonResponse);
         if (jsonResponse["success"] == true) {
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(jsonResponse["message"])));
