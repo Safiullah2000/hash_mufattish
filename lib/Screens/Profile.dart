@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hash_mufattish/app_localizations.dart';
+import 'package:hash_mufattish/LanguageTranslate/app_localizations.dart';
 import 'package:loading_icon_button/loading_icon_button.dart';
 
 class Profile extends StatefulWidget {

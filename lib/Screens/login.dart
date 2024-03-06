@@ -1,9 +1,8 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:hash_mufattish/HomeScreen.dart';
-import 'package:hash_mufattish/app_localizations.dart';
-import 'package:hash_mufattish/local_Provider.dart';
+import 'package:hash_mufattish/LanguageTranslate/app_localizations.dart';
+import 'package:hash_mufattish/Providers/local_Provider.dart';
+import 'package:hash_mufattish/Screens/HomeScreen.dart';
 import 'package:loading_icon_button/loading_icon_button.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;

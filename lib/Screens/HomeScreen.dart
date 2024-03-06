@@ -1,11 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:hash_mufattish/Profile.dart';
-import 'package:hash_mufattish/app_localizations.dart';
-import 'package:hash_mufattish/equipment_info.dart';
-import 'package:hash_mufattish/login.dart';
-import 'package:hash_mufattish/new_inspection.dart';
+import 'package:hash_mufattish/LanguageTranslate/app_localizations.dart';
+import 'package:hash_mufattish/Screens/Profile.dart';
+import 'package:hash_mufattish/Screens/equipment_info.dart';
+import 'package:hash_mufattish/Screens/login.dart';
+import 'package:hash_mufattish/Screens/new_inspection.dart';
 import 'package:loading_icon_button/loading_icon_button.dart';
 import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
 
@@ -70,18 +69,36 @@ class _HomeScreenState extends State<HomeScreen> {
               //   ),
               // ),
               onTap: (startLoading, stopLoading, btnState) {
-                _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
-                    context: context,
-                    onCode: (code) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NewInspection(
-                            data: json.decode(code!),
-                          ),
-                        ),
-                      );
-                    });
+                // _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
+                //     context: context,
+                //     onCode: (code) {
+                //       Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //           builder: (context) => NewInspection(
+                //             data: json.decode(code!),
+                //           ),
+                //         ),
+                //       );
+                //     });
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) => NewInspection(
+                              data: {
+                                "equipment_category": "ABC",
+                                "equipment_sub_category": "Testing Murtaza",
+                                "equipment_type": "123",
+                                "checklist": "Application",
+                                "equipment_name": "Safiullah App",
+                                "description": "flutter",
+                                "equipment_img":
+                                    "https:\/\/inspectosafe.bssstageserverforpanels.xyz\/public\/uploads\/1cdc3a590b07bd3f750d836ad37ff3481709717790.jpg",
+                                "tags": [
+                                  "Speed, Color, Type, Intensity, Movement, Ahmed, Ali, Moon, watch"
+                                ]
+                              },
+                            ))));
               },
             ),
           ),
@@ -109,22 +126,42 @@ class _HomeScreenState extends State<HomeScreen> {
               //   ),
               // ),
               onTap: (startLoading, stopLoading, btnState) {
-                _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
-                    context: context,
-                    onCode: (code) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EquipementInfo(
-                            data: json.decode(code!),
-                          ),
-                        ),
-                      );
-                      // setState(() {
-                      //   this.code = code;
-                      //   print(code);
-                      // });
-                    });
+                // _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
+                //     context: context,
+                //     onCode: (code) {
+                //       Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //           builder: (context) => EquipementInfo(
+                //             data: json.decode(code!),
+                //           ),
+                //         ),
+                //       );
+                //       // setState(() {
+                //       //   this.code = code;
+                //       //   print(code);
+                //       // });
+                //     });
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EquipementInfo(
+                      data: {
+                        "equipment_category": "ABC",
+                        "equipment_sub_category": "Testing Murtaza",
+                        "equipment_type": "123",
+                        "checklist": "Application",
+                        "equipment_name": "Safiullah App",
+                        "description": "flutter",
+                        "equipment_img":
+                            "https:\/\/inspectosafe.bssstageserverforpanels.xyz\/public\/uploads\/1cdc3a590b07bd3f750d836ad37ff3481709717790.jpg",
+                        "tags": [
+                          "Speed, Color, Type, Intensity, Movement, Ahmed, Ali, Moon, watch"
+                        ]
+                      },
+                    ),
+                  ),
+                );
               },
             ),
           ),
@@ -217,17 +254,12 @@ class _HomeScreenState extends State<HomeScreen> {
               //   ),
               // ),
               onTap: (startLoading, stopLoading, btnState) {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()));
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen()));
               },
             ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            code ?? "No data",
-            style: TextStyle(fontSize: 20),
           ),
         ],
       ),
