@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hash_mufattish/app_localizations.dart';
+import 'package:hash_mufattish/equipment_info.dart';
 import 'package:hash_mufattish/l10n.dart';
 import 'package:hash_mufattish/local_Provider.dart';
 import 'package:hash_mufattish/login.dart';
+import 'package:hash_mufattish/new_inspection.dart';
 import 'package:hash_mufattish/splashscreen.dart';
 import 'package:provider/provider.dart';
 

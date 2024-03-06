@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hash_mufattish/Profile.dart';
 import 'package:hash_mufattish/app_localizations.dart';
+import 'package:hash_mufattish/equipment_info.dart';
 import 'package:hash_mufattish/login.dart';
+import 'package:hash_mufattish/new_inspection.dart';
 import 'package:loading_icon_button/loading_icon_button.dart';
 import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
 
@@ -69,10 +73,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
                     context: context,
                     onCode: (code) {
-                      setState(() {
-                        this.code = code;
-                        print(code);
-                      });
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NewInspection(
+                            data: json.decode(code!),
+                          ),
+                        ),
+                      );
                     });
               },
             ),
@@ -100,7 +108,24 @@ class _HomeScreenState extends State<HomeScreen> {
               //     // size: loaderWidth ,
               //   ),
               // ),
-              onTap: (startLoading, stopLoading, btnState) {},
+              onTap: (startLoading, stopLoading, btnState) {
+                _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
+                    context: context,
+                    onCode: (code) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EquipementInfo(
+                            data: json.decode(code!),
+                          ),
+                        ),
+                      );
+                      // setState(() {
+                      //   this.code = code;
+                      //   print(code);
+                      // });
+                    });
+              },
             ),
           ),
           Padding(
