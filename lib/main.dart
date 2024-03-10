@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hash_mufattish/LanguageTranslate/app_localizations.dart';
 import 'package:hash_mufattish/LanguageTranslate/l10n.dart';
 import 'package:hash_mufattish/Providers/checklist_Provider.dart';
+import 'package:hash_mufattish/Providers/editProfileProvider.dart';
 import 'package:hash_mufattish/Providers/local_Provider.dart';
 import 'package:hash_mufattish/Screens/new_inspection.dart';
 import 'package:hash_mufattish/Screens/splashscreen.dart';
@@ -10,9 +11,13 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(MultiProvider(providers: [
-    ChangeNotifierProvider<LocaleProvider>(create: (_) => LocaleProvider()),
+    ChangeNotifierProvider<LocaleProvider>(
+      create: (_) => LocaleProvider(),
+    ),
     ChangeNotifierProvider<ChecklistProvider>(
         create: (_) => ChecklistProvider()),
+    ChangeNotifierProvider<EditProfileProvider>(
+        create: (_) => EditProfileProvider()),
   ], child: const MyApp()));
 }
 

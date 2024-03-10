@@ -14,7 +14,6 @@ class _EquipementInfoState extends State<EquipementInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[100],
       body: Column(
         children: [
           SizedBox(
@@ -136,7 +135,7 @@ class _EquipementInfoState extends State<EquipementInfo> {
                           child: Container(
                             width: MediaQuery.of(context).size.width / 2,
                             child: Text(
-                              "Equipment Category: ",
+                              "Equipment\nCategory: ",
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,

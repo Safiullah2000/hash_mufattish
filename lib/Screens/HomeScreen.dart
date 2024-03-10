@@ -9,6 +9,7 @@ import 'package:loading_icon_button/loading_icon_button.dart';
 import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
 
 class HomeScreen extends StatefulWidget {
+  int id;
   String name;
   String company;
   String branch;
@@ -18,6 +19,7 @@ class HomeScreen extends StatefulWidget {
   String contact;
   HomeScreen({
     super.key,
+    required this.id,
     required this.name,
     required this.company,
     required this.branch,
@@ -69,36 +71,26 @@ class _HomeScreenState extends State<HomeScreen> {
               //   ),
               // ),
               onTap: (startLoading, stopLoading, btnState) {
-                // _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
-                //     context: context,
-                //     onCode: (code) {
-                //       Navigator.push(
-                //         context,
-                //         MaterialPageRoute(
-                //           builder: (context) => NewInspection(
-                //             data: json.decode(code!),
-                //           ),
-                //         ),
-                //       );
-                //     });
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: ((context) => NewInspection(
-                              data: {
-                                "equipment_category": "ABC",
-                                "equipment_sub_category": "Testing Murtaza",
-                                "equipment_type": "123",
-                                "checklist": "Application",
-                                "equipment_name": "Safiullah App",
-                                "description": "flutter",
-                                "equipment_img":
-                                    "https:\/\/inspectosafe.bssstageserverforpanels.xyz\/public\/uploads\/1cdc3a590b07bd3f750d836ad37ff3481709717790.jpg",
-                                "tags": [
-                                  "Speed, Color, Type, Intensity, Movement, Ahmed, Ali, Moon, watch"
-                                ]
-                              },
-                            ))));
+                _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
+                    context: context,
+                    onCode: (code) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NewInspection(
+                            data: json.decode(code!),
+                            id: widget.id,
+                            name: widget.name,
+                            branch: widget.branch,
+                            company: widget.company,
+                            email: widget.email,
+                            password: widget.password,
+                            image: widget.image,
+                            contact: widget.contact,
+                          ),
+                        ),
+                      );
+                    });
               },
             ),
           ),
@@ -126,42 +118,22 @@ class _HomeScreenState extends State<HomeScreen> {
               //   ),
               // ),
               onTap: (startLoading, stopLoading, btnState) {
-                // _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
-                //     context: context,
-                //     onCode: (code) {
-                //       Navigator.push(
-                //         context,
-                //         MaterialPageRoute(
-                //           builder: (context) => EquipementInfo(
-                //             data: json.decode(code!),
-                //           ),
-                //         ),
-                //       );
-                //       // setState(() {
-                //       //   this.code = code;
-                //       //   print(code);
-                //       // });
-                //     });
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EquipementInfo(
-                      data: {
-                        "equipment_category": "ABC",
-                        "equipment_sub_category": "Testing Murtaza",
-                        "equipment_type": "123",
-                        "checklist": "Application",
-                        "equipment_name": "Safiullah App",
-                        "description": "flutter",
-                        "equipment_img":
-                            "https:\/\/inspectosafe.bssstageserverforpanels.xyz\/public\/uploads\/1cdc3a590b07bd3f750d836ad37ff3481709717790.jpg",
-                        "tags": [
-                          "Speed, Color, Type, Intensity, Movement, Ahmed, Ali, Moon, watch"
-                        ]
-                      },
-                    ),
-                  ),
-                );
+                _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
+                    context: context,
+                    onCode: (code) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EquipementInfo(
+                            data: json.decode(code!),
+                          ),
+                        ),
+                      );
+                      // setState(() {
+                      //   this.code = code;
+                      //   print(code);
+                      // });
+                    });
               },
             ),
           ),
@@ -219,6 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => Profile(
+                              id: widget.id,
                               name: widget.name,
                               company: widget.company,
                               branch: widget.branch,

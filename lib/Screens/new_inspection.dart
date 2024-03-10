@@ -1,15 +1,38 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hash_mufattish/Providers/checklist_Provider.dart';
+import 'package:hash_mufattish/Screens/HomeScreen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_icon_button/loading_icon_button.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class NewInspection extends StatefulWidget {
   Map data;
-  NewInspection({super.key, required this.data});
+  int id;
+  String name;
+  String company;
+  String branch;
+  String email;
+  String password;
+  String image;
+  String contact;
+
+  NewInspection({
+    super.key,
+    required this.data,
+    required this.id,
+    required this.name,
+    required this.company,
+    required this.branch,
+    required this.email,
+    required this.password,
+    required this.image,
+    required this.contact,
+  });
 
   @override
   State<NewInspection> createState() => _NewInspectionState();
@@ -164,12 +187,71 @@ class _NewInspectionState extends State<NewInspection> {
     );
   }
 
+  Future saveCheckList() async {
+    if (_certificate!.path.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Certficate Image is required")));
+    } else if (_image!.path.isEmpty) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Attach Image is required")));
+    } else {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+            'https://inspectosafe.bssstageserverforpanels.xyz/api/equipment_inspection'),
+      );
+
+      var image1 = await http.MultipartFile.fromPath(
+          'certificate_img', _certificate!.path);
+      var image2 =
+          await http.MultipartFile.fromPath('current_image', _image!.path);
+      request.files.add(image1);
+      request.files.add(image2);
+      request.fields['equipment_id'] = widget.data["equipment_id"];
+      request.fields['checklist_id'] = widget.data["checklist_id"];
+      int index = 1;
+      Provider.of<ChecklistProvider>(context, listen: false)
+          .items
+          .forEach((key, value) {
+        request.fields['tag' + index.toString()] = value;
+
+        index += 1;
+      });
+      var response = await request.send();
+      var responseString = await response.stream.bytesToString();
+      var jsonResponse = jsonDecode(responseString);
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(jsonResponse["message"])));
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(
+              id: widget.id,
+              name: widget.name,
+              company: widget.company,
+              branch: widget.branch,
+              email: widget.email,
+              password: widget.password,
+              image: widget.image,
+              contact: widget.contact,
+            ),
+          ),
+          (Route<dynamic> route) => false,
+        );
+      } else if (jsonResponse["success"] == false) {
+        print(jsonResponse);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(jsonResponse.toString())));
+      }
+    }
+  }
+
   @override
   void initState() {
     if (widget.data["tags"][0] != "") {
-      items = widget.data["tags"][0].toString().split(",");
+      items = widget.data["tags"] as List;
     }
-
+    print(items);
     Provider.of<ChecklistProvider>(context, listen: false).additems(items);
     super.initState();
   }
@@ -177,7 +259,6 @@ class _NewInspectionState extends State<NewInspection> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[100],
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -192,7 +273,7 @@ class _NewInspectionState extends State<NewInspection> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Image.network(
-                    widget.data!["equipment_img"] ??
+                    widget.data["equipment_img"] ??
                         "https://hashbaqala.bssstageserverforpanels.xyz/upload/profileImage/user.png",
                     scale: 7,
                   ),
@@ -249,7 +330,7 @@ class _NewInspectionState extends State<NewInspection> {
                             padding: EdgeInsets.only(left: 20),
                             width: MediaQuery.of(context).size.width / 2,
                             child: Text(
-                              widget.data!["description"] ?? "No data",
+                              widget.data["description"] ?? "No data",
                               style: TextStyle(
                                 fontSize: 18,
                               ),
@@ -340,7 +421,7 @@ class _NewInspectionState extends State<NewInspection> {
                             padding: EdgeInsets.only(left: 20),
                             width: MediaQuery.of(context).size.width / 2,
                             child: Text(
-                              widget.data!["equipment_type"] ?? "Fire Safety",
+                              widget.data["equipment_type"] ?? "Fire Safety",
                               style: TextStyle(fontSize: 18),
                             ),
                           ),
@@ -486,7 +567,9 @@ class _NewInspectionState extends State<NewInspection> {
                 //     // size: loaderWidth ,
                 //   ),
                 // ),
-                onTap: (startLoading, stopLoading, btnState) {},
+                onTap: (startLoading, stopLoading, btnState) {
+                  saveCheckList();
+                },
               ),
             ),
             SizedBox(
@@ -497,99 +580,99 @@ class _NewInspectionState extends State<NewInspection> {
       ),
     );
   }
+}
 
-  Widget _buildRadioButton(String title) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: TextStyle(fontSize: 17),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Consumer<ChecklistProvider>(
-              builder: (context, ChecklistProvider, child) {
-                return GestureDetector(
-                  onTap: () {
-                    ChecklistProvider.changeValue(title, "Good");
-                  },
-                  child: Row(
-                    children: [
-                      Radio(
-                        fillColor: MaterialStateProperty.all(Colors.green),
-                        activeColor: Colors.green,
-                        value: "Good",
-                        groupValue: ChecklistProvider.items[title],
-                        onChanged: (value) {
-                          ChecklistProvider.changeValue(title, "Good");
-                        },
-                      ),
-                      Text(
-                        'Good',
-                        style: TextStyle(fontSize: 17),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-            Consumer<ChecklistProvider>(
-              builder: (context, ChecklistProvider, child) {
-                return GestureDetector(
-                  onTap: () {
-                    ChecklistProvider.changeValue(title, "Bad");
-                  },
-                  child: Row(
-                    children: [
-                      Radio(
-                        fillColor: MaterialStateProperty.all(Colors.red),
-                        activeColor: Colors.red,
-                        value: "Bad",
-                        groupValue: ChecklistProvider.items[title],
-                        onChanged: (value) {
-                          ChecklistProvider.changeValue(title, "Bad");
-                        },
-                      ),
-                      Text(
-                        'Bad',
-                        style: TextStyle(fontSize: 17),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-            Consumer<ChecklistProvider>(
-              builder: (context, ChecklistProvider, child) {
-                return GestureDetector(
-                  onTap: () {
-                    ChecklistProvider.changeValue(title, "N/A");
-                  },
-                  child: Row(
-                    children: [
-                      Radio(
-                        fillColor: MaterialStateProperty.all(Colors.grey[800]),
-                        activeColor: Colors.grey[800],
-                        value: "N/A",
-                        groupValue: ChecklistProvider.items[title],
-                        onChanged: (value) {
-                          ChecklistProvider.changeValue(title, "N/A");
-                        },
-                      ),
-                      Text(
-                        'N/A',
-                        style: TextStyle(fontSize: 17),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            )
-          ],
-        ),
-      ],
-    );
-  }
+Widget _buildRadioButton(String title) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        title,
+        style: TextStyle(fontSize: 17),
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Consumer<ChecklistProvider>(
+            builder: (context, ChecklistProvider, child) {
+              return GestureDetector(
+                onTap: () {
+                  ChecklistProvider.changeValue(title, "Good");
+                },
+                child: Row(
+                  children: [
+                    Radio(
+                      fillColor: MaterialStateProperty.all(Colors.green),
+                      activeColor: Colors.green,
+                      value: "Good",
+                      groupValue: ChecklistProvider.items[title],
+                      onChanged: (value) {
+                        ChecklistProvider.changeValue(title, "Good");
+                      },
+                    ),
+                    Text(
+                      'Good',
+                      style: TextStyle(fontSize: 17),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          Consumer<ChecklistProvider>(
+            builder: (context, ChecklistProvider, child) {
+              return GestureDetector(
+                onTap: () {
+                  ChecklistProvider.changeValue(title, "Bad");
+                },
+                child: Row(
+                  children: [
+                    Radio(
+                      fillColor: MaterialStateProperty.all(Colors.red),
+                      activeColor: Colors.red,
+                      value: "Bad",
+                      groupValue: ChecklistProvider.items[title],
+                      onChanged: (value) {
+                        ChecklistProvider.changeValue(title, "Bad");
+                      },
+                    ),
+                    Text(
+                      'Bad',
+                      style: TextStyle(fontSize: 17),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          Consumer<ChecklistProvider>(
+            builder: (context, ChecklistProvider, child) {
+              return GestureDetector(
+                onTap: () {
+                  ChecklistProvider.changeValue(title, "N/A");
+                },
+                child: Row(
+                  children: [
+                    Radio(
+                      fillColor: MaterialStateProperty.all(Colors.grey[800]),
+                      activeColor: Colors.grey[800],
+                      value: "N/A",
+                      groupValue: ChecklistProvider.items[title],
+                      onChanged: (value) {
+                        ChecklistProvider.changeValue(title, "N/A");
+                      },
+                    ),
+                    Text(
+                      'N/A',
+                      style: TextStyle(fontSize: 17),
+                    ),
+                  ],
+                ),
+              );
+            },
+          )
+        ],
+      ),
+    ],
+  );
 }

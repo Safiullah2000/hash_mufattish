@@ -43,6 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
             context,
             MaterialPageRoute(
               builder: (context) => HomeScreen(
+                id: jsonResponse["user"]["id"],
                 name: jsonResponse["user"]["fullname"],
                 company: "",
                 branch: "",

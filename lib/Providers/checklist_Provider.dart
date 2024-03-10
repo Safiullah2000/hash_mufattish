@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ChecklistProvider extends ChangeNotifier {
   Map _items = {};
 
-  get items => _items;
+  Map get items => _items;
 
   void additems(List checklist) {
     checklist.forEach((element) {
