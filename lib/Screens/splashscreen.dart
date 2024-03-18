@@ -11,7 +11,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration(seconds: 8), () async {
+    Future.delayed(Duration(seconds: 7), () async {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (builder) => LoginScreen()));
     });

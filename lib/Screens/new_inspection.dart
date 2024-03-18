@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:hash_mufattish/LanguageTranslate/app_localizations.dart';
 import 'package:hash_mufattish/Providers/checklist_Provider.dart';
 import 'package:hash_mufattish/Screens/HomeScreen.dart';
 import 'package:image_picker/image_picker.dart';
@@ -45,6 +46,8 @@ class _NewInspectionState extends State<NewInspection> {
   bool isVisible = false;
   File? _certificate;
   bool isShow = false;
+  TextEditingController issueDate = TextEditingController();
+  TextEditingController expiryDate = TextEditingController();
 
   Future pickImage() async {
     final pickedFile =
@@ -91,7 +94,7 @@ class _NewInspectionState extends State<NewInspection> {
                     elevation: 10,
                     color: Colors.blue,
                     child: Text(
-                      "Add Picture",
+                      AppLocalizations.of(context)!.translate("Add Picture"),
                       style: TextStyle(color: Colors.white),
                     ),
                     // loader: Container(
@@ -113,7 +116,8 @@ class _NewInspectionState extends State<NewInspection> {
                         height: 60,
                         child: _certificate != null
                             ? Image.file(_certificate!)
-                            : Text('No image selected.'),
+                            : Text(AppLocalizations.of(context)!
+                                .translate('No image selected.')),
                       ),
                     ),
                   ),
@@ -122,12 +126,14 @@ class _NewInspectionState extends State<NewInspection> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text("Issue Date: "),
+                        Text(AppLocalizations.of(context)!
+                            .translate("Issue Date: ")),
                         Container(
                           height: 40,
                           width: 100,
                           color: Colors.white,
                           child: TextField(
+                            controller: issueDate,
                             decoration: InputDecoration(
                                 border: InputBorder.none,
                                 focusedBorder: InputBorder.none),
@@ -141,12 +147,14 @@ class _NewInspectionState extends State<NewInspection> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text("Expiry Date: "),
+                        Text(AppLocalizations.of(context)!
+                            .translate("Expiry Date: ")),
                         Container(
                           height: 40,
                           width: 100,
                           color: Colors.white,
                           child: TextField(
+                            controller: expiryDate,
                             decoration: InputDecoration(
                                 border: InputBorder.none,
                                 focusedBorder: InputBorder.none),
@@ -165,7 +173,7 @@ class _NewInspectionState extends State<NewInspection> {
                   elevation: 10,
                   color: Colors.green[600],
                   child: Text(
-                    "Submit",
+                    AppLocalizations.of(context)!.translate("Submit"),
                     style: TextStyle(color: Colors.white),
                   ),
                   // loader: Container(
@@ -209,6 +217,10 @@ class _NewInspectionState extends State<NewInspection> {
       request.files.add(image2);
       request.fields['equipment_id'] = widget.data["equipment_id"];
       request.fields['checklist_id'] = widget.data["checklist_id"];
+      request.fields['issuance_date'] = issueDate.text;
+      request.fields['expiry_date'] = expiryDate.text;
+      request.fields['inspector_name'] = widget.name;
+
       int index = 1;
       Provider.of<ChecklistProvider>(context, listen: false)
           .items
@@ -248,7 +260,7 @@ class _NewInspectionState extends State<NewInspection> {
 
   @override
   void initState() {
-    if (widget.data["tags"][0] != "") {
+    if (widget.data["tags"].toString().isNotEmpty) {
       items = widget.data["tags"] as List;
     }
     print(items);
@@ -284,7 +296,8 @@ class _NewInspectionState extends State<NewInspection> {
                     elevation: 10,
                     color: Colors.green[600],
                     child: Text(
-                      "Add Certificate",
+                      AppLocalizations.of(context)!
+                          .translate("Add Certificate"),
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                     // loader: Container(
@@ -317,7 +330,8 @@ class _NewInspectionState extends State<NewInspection> {
                           child: Container(
                             width: MediaQuery.of(context).size.width / 2,
                             child: Text(
-                              "Description: ",
+                              AppLocalizations.of(context)!
+                                  .translate("Description: "),
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -330,7 +344,9 @@ class _NewInspectionState extends State<NewInspection> {
                             padding: EdgeInsets.only(left: 20),
                             width: MediaQuery.of(context).size.width / 2,
                             child: Text(
-                              widget.data["description"] ?? "No data",
+                              widget.data["description"] ??
+                                  AppLocalizations.of(context)!
+                                      .translate("No data"),
                               style: TextStyle(
                                 fontSize: 18,
                               ),
@@ -348,7 +364,8 @@ class _NewInspectionState extends State<NewInspection> {
                           child: Container(
                             width: MediaQuery.of(context).size.width / 2,
                             child: Text(
-                              "Location Description: ",
+                              AppLocalizations.of(context)!
+                                  .translate("Location Description: "),
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -361,7 +378,8 @@ class _NewInspectionState extends State<NewInspection> {
                             padding: EdgeInsets.only(left: 20),
                             width: MediaQuery.of(context).size.width / 2,
                             child: Text(
-                              "No Data",
+                              AppLocalizations.of(context)!
+                                  .translate("No Data"),
                               style: TextStyle(
                                 fontSize: 18,
                               ),
@@ -379,7 +397,8 @@ class _NewInspectionState extends State<NewInspection> {
                           child: Container(
                             width: MediaQuery.of(context).size.width / 2,
                             child: Text(
-                              "Equipment: ",
+                              AppLocalizations.of(context)!
+                                  .translate("Equipment: "),
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -392,7 +411,9 @@ class _NewInspectionState extends State<NewInspection> {
                             padding: EdgeInsets.only(left: 20),
                             width: MediaQuery.of(context).size.width / 2,
                             child: Text(
-                              widget.data!["equipment_name"] ?? "No data",
+                              widget.data!["equipment_name"] ??
+                                  AppLocalizations.of(context)!
+                                      .translate("No data"),
                               style: TextStyle(fontSize: 18),
                             ),
                           ),
@@ -408,7 +429,8 @@ class _NewInspectionState extends State<NewInspection> {
                           child: Container(
                             width: MediaQuery.of(context).size.width / 2,
                             child: Text(
-                              "Equipment Type: ",
+                              AppLocalizations.of(context)!
+                                  .translate("Equipment Type: "),
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -421,7 +443,9 @@ class _NewInspectionState extends State<NewInspection> {
                             padding: EdgeInsets.only(left: 20),
                             width: MediaQuery.of(context).size.width / 2,
                             child: Text(
-                              widget.data["equipment_type"] ?? "Fire Safety",
+                              widget.data["equipment_type"] ??
+                                  AppLocalizations.of(context)!
+                                      .translate("No Data"),
                               style: TextStyle(fontSize: 18),
                             ),
                           ),
@@ -437,7 +461,8 @@ class _NewInspectionState extends State<NewInspection> {
                           child: Container(
                             width: MediaQuery.of(context).size.width / 2,
                             child: Text(
-                              "Equipment Family: ",
+                              AppLocalizations.of(context)!
+                                  .translate("Equipment Family: "),
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -450,7 +475,8 @@ class _NewInspectionState extends State<NewInspection> {
                             padding: EdgeInsets.only(left: 20),
                             width: MediaQuery.of(context).size.width / 2,
                             child: Text(
-                              "No Data",
+                              AppLocalizations.of(context)!
+                                  .translate("No Data"),
                               style: TextStyle(fontSize: 18),
                             ),
                           ),
@@ -466,7 +492,8 @@ class _NewInspectionState extends State<NewInspection> {
                           child: Container(
                             width: MediaQuery.of(context).size.width / 2,
                             child: Text(
-                              "Last Inspection Date: ",
+                              AppLocalizations.of(context)!
+                                  .translate("Last Inspection Date: "),
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -479,7 +506,8 @@ class _NewInspectionState extends State<NewInspection> {
                             padding: EdgeInsets.only(left: 20),
                             width: MediaQuery.of(context).size.width / 2,
                             child: Text(
-                              "Not Available",
+                              AppLocalizations.of(context)!
+                                  .translate("Not Available"),
                               style: TextStyle(fontSize: 18),
                             ),
                           ),
@@ -494,7 +522,7 @@ class _NewInspectionState extends State<NewInspection> {
               height: 10,
             ),
             Text(
-              "Checklist",
+              AppLocalizations.of(context)!.translate("Checklist"),
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
             items.isEmpty
@@ -524,7 +552,7 @@ class _NewInspectionState extends State<NewInspection> {
                 elevation: 10,
                 color: Colors.red[800],
                 child: Text(
-                  "ATTACH IMAGE",
+                  AppLocalizations.of(context)!.translate("ATTACH IMAGE"),
                   style: TextStyle(color: Colors.white),
                 ),
                 // loader: Container(
@@ -545,7 +573,8 @@ class _NewInspectionState extends State<NewInspection> {
                 height: MediaQuery.of(context).size.height / 5,
                 child: _image != null
                     ? Image.file(_image!)
-                    : Text('No image selected.'),
+                    : Text(AppLocalizations.of(context)!
+                        .translate('No image selected.')),
               ),
             ),
             Padding(
@@ -557,7 +586,7 @@ class _NewInspectionState extends State<NewInspection> {
                 elevation: 10,
                 color: Colors.green[600],
                 child: Text(
-                  "SAVE",
+                  AppLocalizations.of(context)!.translate("SAVE"),
                   style: TextStyle(color: Colors.white),
                 ),
                 // loader: Container(
@@ -597,7 +626,8 @@ Widget _buildRadioButton(String title) {
             builder: (context, ChecklistProvider, child) {
               return GestureDetector(
                 onTap: () {
-                  ChecklistProvider.changeValue(title, "Good");
+                  ChecklistProvider.changeValue(
+                      title, AppLocalizations.of(context)!.translate("Good"));
                 },
                 child: Row(
                   children: [
@@ -611,7 +641,7 @@ Widget _buildRadioButton(String title) {
                       },
                     ),
                     Text(
-                      'Good',
+                      AppLocalizations.of(context)!.translate('Good'),
                       style: TextStyle(fontSize: 17),
                     ),
                   ],
@@ -637,7 +667,7 @@ Widget _buildRadioButton(String title) {
                       },
                     ),
                     Text(
-                      'Bad',
+                      AppLocalizations.of(context)!.translate('Bad'),
                       style: TextStyle(fontSize: 17),
                     ),
                   ],
@@ -663,7 +693,7 @@ Widget _buildRadioButton(String title) {
                       },
                     ),
                     Text(
-                      'N/A',
+                      AppLocalizations.of(context)!.translate('N/A'),
                       style: TextStyle(fontSize: 17),
                     ),
                   ],

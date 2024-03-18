@@ -10,15 +10,20 @@ import 'package:hash_mufattish/Screens/splashscreen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider<LocaleProvider>(
-      create: (_) => LocaleProvider(),
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<LocaleProvider>(
+          create: (_) => LocaleProvider(),
+        ),
+        ChangeNotifierProvider<ChecklistProvider>(
+            create: (_) => ChecklistProvider()),
+        ChangeNotifierProvider<EditProfileProvider>(
+            create: (_) => EditProfileProvider()),
+      ],
+      child: const MyApp(),
     ),
-    ChangeNotifierProvider<ChecklistProvider>(
-        create: (_) => ChecklistProvider()),
-    ChangeNotifierProvider<EditProfileProvider>(
-        create: (_) => EditProfileProvider()),
-  ], child: const MyApp()));
+  );
 }
 
 class MyApp extends StatelessWidget {
